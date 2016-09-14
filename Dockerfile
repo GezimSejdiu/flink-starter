@@ -1,4 +1,4 @@
-FROM bde2020/flink-maven-template:0.10.1-hadoop2.7
+FROM bde2020/flink-maven-template:latest
 
 MAINTAINER Gezim Sejdiu <g.sejdiu@gmail.com>
 
