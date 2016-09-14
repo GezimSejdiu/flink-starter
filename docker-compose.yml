@@ -1,6 +1,12 @@
+version: '2' 
+services:
  namenode:
     image: bde2020/hadoop-namenode:1.0.0
     hostname: namenode
+    container_name: namenode
+    domainname: hadoop
+    networks:
+      - hadoop
     volumes:
       - ./data/namenode:/hadoop/dfs/name
     environment:
@@ -10,50 +16,74 @@
     ports:
       - "50070:50070"
       - "8020:8020"
-
  datanode1:
     image: bde2020/hadoop-datanode:1.0.0
     hostname: datanode1
+    container_name: datanode1
+    domainname: hadoop
+    networks:
+      - hadoop
     volumes:
       - ./data/datanode1:/hadoop/dfs/data
     env_file:
       - ./config/hadoop/hadoop.env
-    links:
-      - "namenode:namenode"
 
  datanode2:
     image: bde2020/hadoop-datanode:1.0.0
+    hostname: datanode2
+    container_name: datanode2
+    domainname: hadoop
+    networks: 
+      - hadoop
     volumes:
       - ./data/datanode2:/hadoop/dfs/data
     env_file:
       - ./config/hadoop/hadoop.env
-    links:
-      - "namenode:namenode"
- flinkmaster:
-    image: bde2020/flink-master:latest
-    hostname: flink-master
-    environment:
+
+ flink-master:
+   image: bde2020/flink-master
+   hostname: flink-master
+   container_name: flink-master
+   domainname: hadoop
+   networks:
+     - hadoop
+   environment:
       - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
       - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
-    env_file:
+   env_file:
       - ./config/hadoop/hadoop.env
-    ports:
-        - "8080:8080"
-        - "8081:8081"
- flinkworker:
-    image: bde2020/flink-worker:latest
-    hostname: flink-worker
-    environment:
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
-    env_file:
-      - ./config/hadoop/hadoop.env
-    links:
-      - "flinkmaster:flink-master"
+   ports:
+     - "8080:8080"
+     - "8081:8081"
+
+ flink-worker:
+   image: bde2020/flink-worker
+   hostname: flink-worker
+   container_name: flink-worker
+   domainname: hadoop
+   networks: 
+     - hadoop
+   environment:
+     - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+     - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
+     - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master 
+   env_file:
+     - ./config/hadoop/hadoop.env
+   links:
+      - "flink-master"
+
  hue:
     image: bde2020/hdfs-filebrowser:3.9
     hostname: hdfsfb
+    container_name: hdfsfb
+    domainname: hadoop
+    networks:
+      - hadoop
     environment:
       - NAMENODE_HOST=namenode
     ports:
       - "8088:8088"
+
+networks:
+  hadoop:
+    external: true
