@@ -8,9 +8,40 @@ cd flink-starter
 mvn clean package
 ```
 
-## HDFS/Flink Workbench
+## Running the application on a Flink standalone cluster via Docker
 
-To start an HDFS/Flink Workbench:
+To run the application, execute the following steps:
+
+1. Setup a Flink cluster as described on http://github.com/big-data-europe/docker-flink.
+2. Build the Docker image: 
+`docker build --rm=true -t bde/flink-starter .`
+3. Run the Docker container: 
+`docker run --name flink-starter-app -e ENABLE_INIT_DAEMON=false --link flink-master:flink-master  -d bde/flink-starter`
+
+## Running the application on a Flink standalone cluster via Flink/HDFS Workbench
+
+Flink/HDFS Workbench Docker Compose file contains HDFS Docker (one namenode and two datanodes), Flink Docker (one master and one worker) and HUE Docker as an HDFS File browser to upload files into HDFS easily. Then, this workbench will play a role as for flink-starter application to perform computations.
+Let's get started and deploy our pipeline with Docker Compose. 
+Run the pipeline:
+
+  ```
+docker network create hadoop
+docker-compose up -d
+  ```
+First, let’s throw some data into our HDFS now by using Hue FileBrowser runing in our network. To perform these actions navigate to http://your.docker.host:8088/home. Use “hue” username with any password to login into the FileBrowser (“hue” user is set up as a proxy user for HDFS, see hadoop.env for the configuration parameters). Click on “File Browser” in upper right corner of the screen and use GUI to create /user/root/input and /user/root/output folders and upload the data file into /input folder.
+Go to http://your.docker.host:50070 and check if the file exists under the path ‘/user/root/input/yourfile’.
+
+After we have all the configuration needed for our example, let’s rebuild flink-starter.
+
 ```
-    docker-compose up -d
+docker build — rm=true -t bde/flink-starter .
 ```
+And then just run this image:
+```
+docker run — name flink-starter-app — net hadoop — link flink-master:flink-master \
+-e ENABLE_INIT_DAEMON=false \
+-e FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master \
+-e FLINK_MASTER_PORT_6123_TCP_PORT=6123 \
+-d bde/flink-starter
+```
+
