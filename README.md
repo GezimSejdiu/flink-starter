@@ -34,11 +34,11 @@ Go to http://your.docker.host:50070 and check if the file exists under the path 
 After we have all the configuration needed for our example, let’s rebuild flink-starter.
 
 ```
-docker build — rm=true -t bde/flink-starter .
+docker build --rm=true -t bde/flink-starter .
 ```
 And then just run this image:
 ```
-docker run — name flink-starter-app — net hadoop — link flink-master:flink-master \
+docker run --name flink-starter-app --net hadoop --link flink-master:flink-master \
 -e ENABLE_INIT_DAEMON=false \
 -e FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master \
 -e FLINK_MASTER_PORT_6123_TCP_PORT=6123 \
