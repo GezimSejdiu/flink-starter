@@ -11,6 +11,8 @@ services:
       - ./data/namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
+      - INIT_DAEMON_STEP=setup_hdfs
+      - VIRTUAL_HOST=hdfs.demo.big-data-europe.local
     env_file:
       - ./config/hadoop/hadoop.env
     ports:
@@ -50,6 +52,9 @@ services:
    environment:
       - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
       - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
+      - INIT_DAEMON_STEP=setup_flink
+      - VIRTUAL_HOST=flink-master.demo.big-data-europe.local
+      - VIRTUAL_PORT=8080
    env_file:
       - ./config/hadoop/hadoop.env
    ports:
@@ -66,12 +71,28 @@ services:
    environment:
      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
      - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
-     - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master 
+     - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master
+     - VIRTUAL_HOST=flink-worker.demo.big-data-europe.local
+     -  VIRTUAL_PORT=8081 
    env_file:
      - ./config/hadoop/hadoop.env
    links:
       - "flink-master"
 
+ flink-starter:
+    build: .
+    environment:
+      -INIT_DAEMON_STEP=compute_aggregations
+      -HDFS_URL=hdfs://namenode:8020
+    links:
+      - "master:flink-master"
+
+ integratorui:
+    image: bde2020/integrator-ui:latest
+    volumes:
+      - ./config/integrator:/app/config
+    environment:
+      VIRTUAL_HOST: flink-starter.big-data-europe.local
  hue:
     image: bde2020/hdfs-filebrowser:3.9
     hostname: hdfsfb
@@ -81,6 +102,8 @@ services:
       - hadoop
     environment:
       - NAMENODE_HOST=namenode
+      - VIRTUAL_HOST=hue.demo.big-data-europe.local
+      - VIRTUAL_PORT=8088
     ports:
       - "8088:8088"
 
