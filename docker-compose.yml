@@ -41,6 +41,35 @@ services:
       - ./data/datanode2:/hadoop/dfs/data
     env_file:
       - ./config/hadoop/hadoop.env
+ resourcemanager:
+    image: bde2020/hadoop-resourcemanager:1.0.0
+    hostname: resourcemanager
+    container_name: resourcemanager
+    domainname: hadoop
+    networks:
+      - hadoop
+    expose:
+      - "8031"
+      - "8088"
+    environment:
+      - VIRTUAL_HOST=hdfs-resourcemanager.demo.big-data-europe.local
+      - VIRTUAL_PORT=8088
+    env_file:
+      - ./config/hadoop/hadoop.env
+
+ filebrowser:
+    image: bde2020/hdfs-filebrowser:3.9
+    hostname: filebrowser
+    container_name: filebrowser
+    domainname: hadoop
+    networks:
+      - hadoop
+    environment:
+      - NAMENODE_HOST=namenode
+      - VIRTUAL_HOST=hue.demo.big-data-europe.local
+      - VIRTUAL_PORT=8088
+#    ports:
+#      - "8088:8088"
 
  flink-master:
    image: bde2020/flink-master
@@ -71,41 +100,131 @@ services:
    environment:
      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
      - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
-     - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master
+     - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master 
      - VIRTUAL_HOST=flink-worker.demo.big-data-europe.local
-     -  VIRTUAL_PORT=8081 
+     - VIRTUAL_PORT=8081 
    env_file:
      - ./config/hadoop/hadoop.env
    links:
       - "flink-master"
 
  flink-starter:
-    build: .
-    environment:
-      -INIT_DAEMON_STEP=compute_aggregations
-      -HDFS_URL=hdfs://namenode:8020
-    links:
-      - "master:flink-master"
+  image: bde/flink-starter
+  hostname: flink-starter
+  container_name: flink-starter
+  domainname: hadoop
+  networks:
+    - hadoop
+  environment:
+      - INIT_DAEMON_STEP=compute_aggregations
+      - HDFS_URL=hdfs://namenode:8020
+      - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master
+      - FLINK_MASTER_PORT_6123_TCP_PORT=6123
+  env_file:
+    - ./config/hadoop/hadoop.env
+  links:
+   - "flink-master"
 
  integratorui:
-    image: bde2020/integrator-ui:latest
-    volumes:
+   image: bde2020/integrator-ui:latest
+   hostname: integratorui
+   container_name: integratorui
+   domainname: hadoop
+   networks:
+     - hadoop
+   volumes:
       - ./config/integrator:/app/config
-    environment:
-      VIRTUAL_HOST: flink-starter.big-data-europe.local
- hue:
-    image: bde2020/hdfs-filebrowser:3.9
-    hostname: hdfsfb
-    container_name: hdfsfb
+   environment:
+      - VIRTUAL_HOST=demo.big-data-europe.local
+
+ csswrapper:
+    image: gezim/flink-starter-integrator-css-wrapper
+    hostname: csswrapper
+    container_name: csswrapper
     domainname: hadoop
     networks:
       - hadoop
-    environment:
-      - NAMENODE_HOST=namenode
-      - VIRTUAL_HOST=hue.demo.big-data-europe.local
-      - VIRTUAL_PORT=8088
     ports:
-      - "8088:8088"
+      - 80:80
+    links:
+      - namenode:namenode
+      - resourcemanager:resourcemanager
+      - filebrowser:filebrowser
+      - flink-master:flink-master
+      - flink-worker:flink-worker
+      - integratorui:integratorui
+      - monitor:monitor
+      - database:database
+    depends_on:
+      - namenode
+      - resourcemanager
+      - filebrowser
+      - flink-master
+      - flink-worker
+      - integratorui
+      - monitor
+      - database
+
+ monitor:
+   image: bde2020/pipeline-monitor-frontend:0.1.0
+   hostname: monitor
+   container_name: monitor
+   domainname: hadoop
+   networks:
+    - hadoop
+   links:
+    - identifier:backend
+   environment:
+    - VIRTUAL_HOST=monitor.demo.big-data-europe.local
+
+ identifier:
+  image: semtech/mu-identifier:1.0.0
+  hostname: identifier
+  container_name: identifier
+  domainname: hadoop
+  networks:
+   - hadoop
+
+ dispatcher:
+  image: semtech/mu-dispatcher:1.0.1
+  hostname: dispatcher
+  container_name: dispatcher
+  domainname: hadoop
+  networks:
+    - hadoop
+  volumes:
+    - ./config:/config
+
+ database:
+  image: tenforce/virtuoso:1.0.0-virtuoso7.2.2
+  hostname: database
+  container_name: database
+  domainname: hadoop
+  networks:
+    - hadoop
+  environment:
+     - SPARQL_UPDATE=true
+     - DEFAULT_GRAPH=http://mu.semte.ch/application
+     - VIRTUAL_HOST=virtuoso.demo.big-data-europe.local
+     - VIRTUAL_PORT=8890
+  volumes:
+     - ./data/db:/data
+
+ pipeline:
+  image: bde2020/mu-pipeline-service:0.1.0
+  hostname: pipeline
+  container_name: pipeline
+  domainname: hadoop
+  networks:
+    - hadoop
+
+ initdaemon:
+  image: bde2020/mu-init-daemon-service:0.1.0
+  hostname: initdaemon
+  container_name: initdaemon
+  domainname: hadoop
+  networks:
+    - hadoop
 
 networks:
   hadoop:

@@ -24,14 +24,14 @@
 	ns3:title	"Populate HDFS with core data" ;
 	ns3:description	"Please upload the data to the HDFS filesystem.  This is a manual step.  Press finish when you're done" ;
 	ns4:code	"populate_hdfs" ;
-	ns4:order	3 ;
+	ns4:order	2 ;
 	ns4:status	"not_started" .
 <http://www.big-data-europe.eu/data/steps/56C51356DEAA160009000002>	rdf:type	ns1:Step ;
 	ns2:uuid	"56C51356DEAA160009000002" ;
 	ns3:title	"Setup Flink" ;
 	ns3:description	"Starts the flink manager and workers." ;
 	ns4:code	"setup_flink" ;
-	ns4:order	2 ;
+	ns4:order	3 ;
 	ns4:status	"not_started" .
 <http://www.big-data-europe.eu/data/steps/56C51724DEAA160009000003>	rdf:type	ns1:Step ;
 	ns2:uuid	"56C51724DEAA160009000003" ;

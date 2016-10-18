@@ -3,7 +3,7 @@
     "id": 1,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Flink Master",
+      "label": "Apache Flink Dashboard",
       "base-url": "http://flink-master.demo.big-data-europe.local"
     }
   },
@@ -11,7 +11,7 @@
     "id": 2,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Flink Worker",
+      "label": "Flink Submit",
       "base-url": "http://flink-worker.demo.big-data-europe.local"
     }
   },
