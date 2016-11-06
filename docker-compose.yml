@@ -72,7 +72,7 @@ services:
 #      - "8088:8088"
 
  flink-master:
-   image: bde2020/flink-master
+   image: bde2020/flink-master:1.1.3-hadoop2.7
    hostname: flink-master
    container_name: flink-master
    domainname: hadoop
@@ -91,7 +91,7 @@ services:
      - "8081:8081"
 
  flink-worker:
-   image: bde2020/flink-worker
+   image: bde2020/flink-worker:1.1.3-hadoop2.7
    hostname: flink-worker
    container_name: flink-worker
    domainname: hadoop
@@ -109,7 +109,8 @@ services:
       - "flink-master"
 
  flink-starter:
-  image: bde/flink-starter
+#  image: bde/flink-starter
+  build: .
   hostname: flink-starter
   container_name: flink-starter
   domainname: hadoop
@@ -138,7 +139,8 @@ services:
       - VIRTUAL_HOST=demo.big-data-europe.local
 
  csswrapper:
-    image: gezim/flink-starter-integrator-css-wrapper
+#    image: gezim/flink-starter-integrator-css-wrapper
+    build: ./csswrapper/
     hostname: csswrapper
     container_name: csswrapper
     domainname: hadoop

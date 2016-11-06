@@ -8,6 +8,28 @@ cd flink-starter
 mvn clean package
 ```
 
+## Running the application on a Flink standalone cluster via Flink Docker using BDE Pipeline
+
+The flink-starter flow consists of the following steps:
+
+1. Setup HDFS
+2. Setup Flink cluster
+3. Put input file on HDFS
+4. Compute aggregations
+5. Get output from HDFS
+
+To run the flink-starter application as a BDE pipeline, execute the following commands:
+```
+  git clone https://github.com/gezims/flink-starter
+  cd flink-starter
+
+  cd csswrapper/ && make hosts && cd ..
+
+  docker create network hadoop
+  docker-compose up -d
+```
+Note:To make it run, you may need to modify your /etc/hosts file. There is a Makefile, which will do it automatically for you (you should clean up your /etc/hosts after demo).
+
 ## Running the application on a Flink standalone cluster via Docker
 
 To run the application, execute the following steps:
