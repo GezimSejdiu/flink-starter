@@ -11,20 +11,12 @@
     "id": 2,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Flink Submit",
-      "base-url": "http://flink-worker.demo.big-data-europe.local"
-    }
-  },
-  {
-    "id": 3,
-    "type": "user-interfaces",
-    "attributes": {
       "label": "HDFS",
       "base-url": "http://hdfs.demo.big-data-europe.local"
     }
   },
   {
-    "id": 4,
+    "id": 3,
     "type": "user-interfaces",
     "attributes": {
       "label": "Hue",
@@ -32,7 +24,7 @@
     }
   },
   {
-    "id": 5,
+    "id": 4,
     "type": "user-interfaces",
     "attributes": {
       "label": "Virtuoso",
@@ -40,7 +32,7 @@
     }
   },
   {
-    "id": 6,
+    "id": 5,
     "type": "user-interfaces",
     "attributes": {
       "label": "Monitor",
