@@ -25,7 +25,7 @@ To run the flink-starter application as a BDE pipeline, execute the following co
 
   cd csswrapper/ && make hosts && cd ..
 
-  docker create network hadoop
+  docker network create hadoop
   docker-compose up -d
 ```
 Note:To make it run, you may need to modify your /etc/hosts file. There is a Makefile, which will do it automatically for you (you should clean up your /etc/hosts after demo).
