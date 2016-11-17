@@ -7,14 +7,6 @@
       "base-url": "http://flink-master.demo.big-data-europe.local"
     }
   },
-#  {
-#    "id": 2,
-#    "type": "user-interfaces",
-#    "attributes": {
-#      "label": "Flink Submit",
-#      "base-url": "http://flink-worker.demo.big-data-europe.local"
-#    }
-#  },
   {
     "id": 2,
     "type": "user-interfaces",
@@ -28,7 +20,8 @@
     "type": "user-interfaces",
     "attributes": {
       "label": "Hue",
-      "base-url": "http://hue.demo.big-data-europe.local"
+      "base-url": "http://hue.demo.big-data-europe.local",
+      "append-path": "/home"
     }
   },
   {

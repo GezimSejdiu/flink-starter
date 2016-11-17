@@ -68,6 +68,7 @@ services:
       - NAMENODE_HOST=namenode
       - VIRTUAL_HOST=hue.demo.big-data-europe.local
       - VIRTUAL_PORT=8088
+      - django_debug_mode=false
 #    ports:
 #      - "8088:8088"
 

@@ -20,7 +20,8 @@
     "type": "user-interfaces",
     "attributes": {
       "label": "Hue",
-      "base-url": "http://hue.demo.big-data-europe.local"
+      "base-url": "http://hue.demo.big-data-europe.local",
+      "append-path": "/home"
     }
   },
   {
