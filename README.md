@@ -23,6 +23,8 @@ To run the flink-starter application as a BDE pipeline, execute the following co
   git clone https://github.com/gezims/flink-starter.git
   cd flink-starter
 
+  git checkout init-daemon
+
   cd csswrapper/ && make hosts && cd ..
 
   docker network create hadoop
