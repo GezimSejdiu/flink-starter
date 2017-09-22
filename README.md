@@ -3,7 +3,7 @@ This is a starter repo for Apache Flink docker.
 
 ## Build
 ```
-git clone https://github.com/gezims/flink-starter.git
+git clone https://github.com/SmartDataAnalytics/flink-starter.git
 cd flink-starter
 mvn clean package
 ```
@@ -20,7 +20,7 @@ The flink-starter flow consists of the following steps:
 
 To run the flink-starter application as a BDE pipeline, execute the following commands:
 ```
-  git clone https://github.com/gezims/flink-starter.git
+  git clone https://github.com/SmartDataAnalytics/flink-starter.git
   cd flink-starter
 
   git checkout init-daemon
@@ -37,15 +37,15 @@ Note:To make it run, you may need to modify your /etc/hosts file. There is a Mak
 To run the application, execute the following steps:
 
 1. Setup a Flink cluster as described on http://github.com/big-data-europe/docker-flink.
-2. Build the Docker image: 
+2. Build the Docker image:
 `docker build --rm=true -t bde/flink-starter .`
-3. Run the Docker container: 
+3. Run the Docker container:
 `docker run --name flink-starter-app -e ENABLE_INIT_DAEMON=false --link flink-master:flink-master  -d bde/flink-starter`
 
 ## Running the application on a Flink standalone cluster via Flink/HDFS Workbench
 
 Flink/HDFS Workbench Docker Compose file contains HDFS Docker (one namenode and two datanodes), Flink Docker (one master and one worker) and HUE Docker as an HDFS File browser to upload files into HDFS easily. Then, this workbench will play a role as for flink-starter application to perform computations.
-Let's get started and deploy our pipeline with Docker Compose. 
+Let's get started and deploy our pipeline with Docker Compose.
 Run the pipeline:
 
   ```
@@ -68,4 +68,3 @@ docker run --name flink-starter-app --net hadoop --link flink-master:flink-maste
 -e FLINK_MASTER_PORT_6123_TCP_PORT=6123 \
 -d bde/flink-starter
 ```
-
