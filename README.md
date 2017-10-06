@@ -3,7 +3,7 @@ This is a starter repo for Apache Flink docker.
 
 ## Build
 ```
-git clone https://github.com/SmartDataAnalytics/flink-starter.git
+git clone https://github.com/GezimSejdiu/flink-starter.git
 cd flink-starter
 mvn clean package
 ```
@@ -20,7 +20,7 @@ The flink-starter flow consists of the following steps:
 
 To run the flink-starter application as a BDE pipeline, execute the following commands:
 ```
-  git clone https://github.com/SmartDataAnalytics/flink-starter.git
+  git clone https://github.com/GezimSejdiu/flink-starter.git
   cd flink-starter
 
   git checkout init-daemon
